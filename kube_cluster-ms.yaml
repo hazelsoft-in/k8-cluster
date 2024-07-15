@@ -37,6 +37,7 @@ spec:
   networking:
     calico: {}
   nonMasqueradeCIDR: 100.64.0.0/10
+  project: kubernetes-trial-429011
   sshAccess:
   - 0.0.0.0/0
   subnets:
