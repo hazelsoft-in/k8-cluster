@@ -15,24 +15,18 @@ spec:
   - etcdMembers:
     - instanceGroup: master-asia-south-1a
       name: a
-      zone: asia-south1-a
     - instanceGroup: master-asia-south-1b
       name: b
-      zone: asia-south1-b
     - instanceGroup: master-asia-south-1c
       name: c
-      zone: asia-south1-c
     name: main
   - etcdMembers:
     - instanceGroup: master-asia-south-1a
       name: a
-      zone: asia-south1-a
     - instanceGroup: master-asia-south-1b
       name: b
-      zone: asia-south1-b
     - instanceGroup: master-asia-south-1c
       name: c
-      zone: asia-south1-c
     name: events
   kubernetesApiAccess:
   - 0.0.0.0/0
@@ -85,6 +79,8 @@ spec:
   role: Bastion
   subnets:
   - utility-asia-south-2c
+  zones:
+  - asia-south1-c
 
 
 ---
@@ -103,7 +99,8 @@ spec:
   role: Master
   subnets:
   - asia-south-2a  
-
+  zones:
+  - asia-south1-a
 
 ---
 
@@ -121,6 +118,8 @@ spec:
   role: Master
   subnets:
   - asia-south-2b
+  zones:
+  - asia-south1-b
 
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
@@ -136,7 +135,8 @@ spec:
   role: Master
   subnets:
   - asia-south-2c
-
+  zones:
+  - asia-south1-c
 ---
 
 apiVersion: kops.k8s.io/v1alpha2
