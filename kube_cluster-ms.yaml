@@ -17,20 +17,16 @@ spec:
       name: a
     - instanceGroup: master-asia-south-1b
       name: b
-    - instanceGroup: master-asia-south-1c
-      name: c
     name: main
   - etcdMembers:
     - instanceGroup: master-asia-south-1a
       name: a
     - instanceGroup: master-asia-south-1b
       name: b
-    - instanceGroup: master-asia-south-1c
-      name: c
     name: events
   kubernetesApiAccess:
   - 0.0.0.0/0
-  kubernetesVersion: '1.30'
+  kubernetesVersion: '1.26.0'
   masterPublicName: api.k8s.hazelsoft.in
   networkID: vpc-6335dd1a
   networking:
@@ -83,7 +79,7 @@ kind: InstanceGroup
 metadata:
   labels:
     kops.k8s.io/cluster: hazelsoft.ms.k8s.local
-  name: master-asia-south-2a
+  name: master-asia-south-1a
 spec:
   image: kope.io/k8s-1.6-debian-jessie-amd64-hvm-ebs-2017-05-02
   machineType: n2d-standard-4
@@ -101,7 +97,7 @@ kind: InstanceGroup
 metadata:
   labels:
     kops.k8s.io/cluster: hazelsoft.ms.k8s.local
-  name: master-asia-south-2b
+  name: master-asia-south-1b
 spec:
   image: kope.io/k8s-1.6-debian-jessie-amd64-hvm-ebs-2017-05-02
   machineType: n2d-standard-4
