@@ -9,7 +9,7 @@ spec:
   authorization:
     alwaysAllow: {}
   channel: stable
-  cloudProvider: gcp
+  cloudProvider: gce
   configBase: gs://kops-k8s-cluster-store/
   etcdClusters:
   - etcdMembers:
