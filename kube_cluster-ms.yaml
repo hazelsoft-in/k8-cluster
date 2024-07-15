@@ -15,18 +15,24 @@ spec:
   - etcdMembers:
     - instanceGroup: master-asia-south-1a
       name: a
+      zone: asia-south1-a
     - instanceGroup: master-asia-south-1b
       name: b
+      zone: asia-south1-b
     - instanceGroup: master-asia-south-1c
       name: c
+      zone: asia-south1-c
     name: main
   - etcdMembers:
     - instanceGroup: master-asia-south-1a
       name: a
+      zone: asia-south1-a
     - instanceGroup: master-asia-south-1b
       name: b
+      zone: asia-south1-b
     - instanceGroup: master-asia-south-1c
       name: c
+      zone: asia-south1-c
     name: events
   kubernetesApiAccess:
   - 0.0.0.0/0
@@ -96,8 +102,7 @@ spec:
   minSize: 1
   role: Master
   subnets:
-  - asia-south-1a
-  zone: asia-south1-a  
+  - asia-south-2a  
 
 
 ---
@@ -114,7 +119,6 @@ spec:
   maxSize: 1
   minSize: 1
   role: Master
-  zone: asia-south1-b
   subnets:
   - asia-south-2b
 
@@ -130,7 +134,6 @@ spec:
   maxSize: 1
   minSize: 1
   role: Master
-  zone: asia-south1-c
   subnets:
   - asia-south-2c
 
