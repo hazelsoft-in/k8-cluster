@@ -1,0 +1,2 @@
+
+export KOPS_STATE_STORE=gs://kops-k8s-cluster-store/
