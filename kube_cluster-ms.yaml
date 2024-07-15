@@ -1,0 +1,130 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  name: hazelsoft.ms.k8s.local
+spec:
+  api:
+    loadBalancer:
+      type: Internal
+  authorization:
+    alwaysAllow: {}
+  channel: stable
+  cloudProvider: gcp
+  configBase: gs://kops-k8s-cluster-store/
+  etcdClusters:
+  - etcdMembers:
+    - instanceGroup: master-asia-south-1a
+      name: a
+    - instanceGroup: master-asia-south-1b
+      name: b
+    - instanceGroup: master-asia-south-1c
+      name: c
+    name: main
+  - etcdMembers:
+    - instanceGroup: master-asia-south-1a
+      name: a
+    - instanceGroup: master-asia-south-1b
+      name: b
+    - instanceGroup: master-asia-south-1c
+      name: c
+    name: events
+  kubernetesApiAccess:
+  - 0.0.0.0/0
+  kubernetesVersion: 1.30
+  masterPublicName: api.k8s.hazelsoft.in
+  networkCIDR: 172.20.0.0/16
+  networkID: vpc-6335dd1a
+  networking:
+    calico: {}
+  nonMasqueradeCIDR: 100.64.0.0/10
+  sshAccess:
+  - 0.0.0.0/0
+  subnets:
+  - cidr: 172.20.32.0/19
+    name: asia-south-2a
+    type: Private
+    zone: asia-south-2a
+  - cidr: 172.20.64.0/19
+    name: asia-south-2b
+    type: Private
+    zone: asia-south-2b
+    name: utility-asia-south-2c
+    type: Utility
+    zone: asia-south-2c
+
+  topology:
+    bastion:
+      bastionPublicName: bastion.k8s.hazelsoft.in
+    dns:
+      type: Public
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: k8s.hazelsoft.in
+  name: bastions
+spec:
+  image: kope.io/k8s-1.6-debian-jessie-amd64-hvm-ebs-2017-05-02
+  machineType: n2d-standard-4
+  maxSize: 1
+  minSize: 1
+  role: Bastion
+  subnets:
+  - utility-asia-south-2c
+
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: k8s.hazelsoft.in
+  name: master-asia-south-2a
+spec:
+  image: kope.io/k8s-1.6-debian-jessie-amd64-hvm-ebs-2017-05-02
+  machineType: n2d-standard-4
+  maxSize: 1
+  minSize: 1
+  role: Master
+  subnets:
+  - asia-south-2a
+
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: k8s.hazelsoft.in
+  name: master-asia-south-2b
+spec:
+  image: kope.io/k8s-1.6-debian-jessie-amd64-hvm-ebs-2017-05-02
+  machineType: n2d-standard-4
+  maxSize: 1
+  minSize: 1
+  role: Master
+  subnets:
+  - asia-south-2b
+
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: k8s.hazelsoft.in
+  name: nodes
+spec:
+  image: kope.io/k8s-1.6-debian-jessie-amd64-hvm-ebs-2017-05-02
+  machineType: n2d-standard-4
+  maxSize: 3
+  minSize: 3
+  role: Node
+  subnets:
+  - asia-south-2a
