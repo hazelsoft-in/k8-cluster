@@ -48,6 +48,11 @@ spec:
     name: asia-south-2b
     region: asia-south1
     type: Private
+  - cidr: 172.20.96.0/19
+    name: asia-south-2c
+    region: asia-south1
+    type: Private
+  - cidr: 172.20.0.0/22
     name: utility-asia-south-2c
     region: asia-south1
     type: Utility
