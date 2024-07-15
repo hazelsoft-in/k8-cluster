@@ -30,7 +30,7 @@ spec:
     name: events
   kubernetesApiAccess:
   - 0.0.0.0/0
-  kubernetesVersion: 1.30
+  kubernetesVersion: '1.30'
   masterPublicName: api.k8s.hazelsoft.in
   networkCIDR: 172.20.0.0/16
   networkID: vpc-6335dd1a
@@ -42,13 +42,16 @@ spec:
   subnets:
   - cidr: 172.20.32.0/19
     name: asia-south-2a
+    region: asia-south1
     type: Private
     zone: asia-south-2a
   - cidr: 172.20.64.0/19
     name: asia-south-2b
+    region: asia-south1
     type: Private
     zone: asia-south-2b
     name: utility-asia-south-2c
+    region: asia-south1
     type: Utility
     zone: asia-south-2c
 
