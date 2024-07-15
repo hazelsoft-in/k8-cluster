@@ -15,18 +15,10 @@ spec:
   - etcdMembers:
     - instanceGroup: master-asia-south-1a
       name: a
-    - instanceGroup: master-asia-south-1b
-      name: b
-    - instanceGroup: master-asia-south-1c
-      name: c
     name: main
   - etcdMembers:
     - instanceGroup: master-asia-south-1a
       name: a
-    - instanceGroup: master-asia-south-1b
-      name: b
-    - instanceGroup: master-asia-south-1c
-      name: c
     name: events
   kubernetesApiAccess:
   - 0.0.0.0/0
@@ -104,40 +96,6 @@ spec:
 
 ---
 
-apiVersion: kops.k8s.io/v1alpha2
-kind: InstanceGroup
-metadata:
-  labels:
-    kops.k8s.io/cluster: hazelsoft.ms.k8s.local
-  name: master-asia-south-1b
-spec:
-  image: kope.io/k8s-1.6-debian-jessie-amd64-hvm-ebs-2017-05-02
-  machineType: n2d-standard-4
-  maxSize: 1
-  minSize: 1
-  role: Master
-  subnets:
-  - asia-south-2b
-  zones:
-  - asia-south1-b
-
-apiVersion: kops.k8s.io/v1alpha2
-kind: InstanceGroup
-metadata:
-  labels:
-    kops.k8s.io/cluster: hazelsoft.ms.k8s.local
-  name: master-asia-south-1c
-spec:
-  image: kope.io/k8s-1.6-debian-jessie-amd64-hvm-ebs-2017-05-02
-  machineType: n2d-standard-4
-  maxSize: 1
-  minSize: 1
-  role: Master
-  subnets:
-  - asia-south-2c
-  zones:
-  - asia-south1-c
----
 
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
@@ -148,8 +106,8 @@ metadata:
 spec:
   image: kope.io/k8s-1.6-debian-jessie-amd64-hvm-ebs-2017-05-02
   machineType: n2d-standard-4
-  maxSize: 3
+  maxSize: 5
   minSize: 3
   role: Node
   subnets:
-  - asia-south-2a
+  - asia-south1-a
