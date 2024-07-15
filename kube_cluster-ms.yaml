@@ -96,7 +96,8 @@ spec:
   minSize: 1
   role: Master
   subnets:
-  - asia-south-2a
+  - asia-south-1a
+  zone: asia-south1-a  
 
 
 ---
@@ -113,6 +114,7 @@ spec:
   maxSize: 1
   minSize: 1
   role: Master
+  zone: asia-south1-b
   subnets:
   - asia-south-2b
 
@@ -128,6 +130,7 @@ spec:
   maxSize: 1
   minSize: 1
   role: Master
+  zone: asia-south1-c
   subnets:
   - asia-south-2c
 
