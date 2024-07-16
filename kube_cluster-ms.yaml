@@ -1,7 +1,7 @@
 apiVersion: kops.k8s.io/v1alpha2
 kind: Cluster
 metadata:
-  name: hazelsoft.ms.k8s.local
+  name: hazelsoft-ms.k8s.local
 spec:
   api:
     loadBalancer:
@@ -13,17 +13,17 @@ spec:
   configBase: gs://kops-k8s-cluster-store/
   etcdClusters:
   - etcdMembers:
-    - instanceGroup: master-asia-south-1a
+    - instanceGroup: master-asia-south1-a
       name: a
     name: main
   - etcdMembers:
-    - instanceGroup: master-asia-south-1a
+    - instanceGroup: master-asia-south1-b
       name: a
     name: events
   kubernetesApiAccess:
   - 0.0.0.0/0
   kubernetesVersion: '1.26.0'
-  masterPublicName: api.k8s.hazelsoft.in
+  masterPublicName: api-ms.k8s.hazelsoft.in
   networkID: vpc-6335dd1a
   networking:
     calico: {}
@@ -51,7 +51,7 @@ spec:
 
   topology:
     bastion:
-      bastionPublicName: bastion.k8s.hazelsoft.in
+      bastionPublicName: bastion-ms.k8s.hazelsoft.in
     dns:
       type: Public
 
@@ -61,7 +61,7 @@ apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
   labels:
-    kops.k8s.io/cluster: hazelsoft.ms.k8s.local
+    kops.k8s.io/cluster: hazelsoft-ms.k8s.local
   name: bastions
 spec:
   image: kope.io/k8s-1.6-debian-jessie-amd64-hvm-ebs-2017-05-02
@@ -70,9 +70,9 @@ spec:
   minSize: 1
   role: Bastion
   subnets:
-  - utility-asia-south-2c
+  - utility-asia-south1-a
   zones:
-  - asia-south1-c
+  - asia-south1-a
 
 
 ---
@@ -81,8 +81,8 @@ apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
   labels:
-    kops.k8s.io/cluster: hazelsoft.ms.k8s.local
-  name: master-asia-south-1a
+    kops.k8s.io/cluster: hazelsoft-ms.k8s.local
+  name: master-asia-south1-b
 spec:
   image: kope.io/k8s-1.6-debian-jessie-amd64-hvm-ebs-2017-05-02
   machineType: n2d-standard-4
@@ -90,9 +90,9 @@ spec:
   minSize: 1
   role: Master
   subnets:
-  - asia-south-2a  
+  - asia-south1-b  
   zones:
-  - asia-south1-a
+  - asia-south1-b
 
 ---
 
@@ -101,7 +101,7 @@ apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
   labels:
-    kops.k8s.io/cluster: hazelsoft.ms.k8s.local
+    kops.k8s.io/cluster: hazelsoft-ms.k8s.local
   name: nodes
 spec:
   image: kope.io/k8s-1.6-debian-jessie-amd64-hvm-ebs-2017-05-02
@@ -110,4 +110,6 @@ spec:
   minSize: 3
   role: Node
   subnets:
-  - asia-south1-a
+  - asia-south1-c
+  zones:
+  - asia-south1-c
