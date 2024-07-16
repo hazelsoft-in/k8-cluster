@@ -1,115 +1,168 @@
 apiVersion: kops.k8s.io/v1alpha2
 kind: Cluster
 metadata:
+  creationTimestamp: null
   name: hazelsoft-ms.k8s.local
 spec:
   api:
     loadBalancer:
-      type: Internal
+      type: Public
   authorization:
-    alwaysAllow: {}
+    rbac: {}
   channel: stable
+  cloudConfig: {}
   cloudProvider: gce
-  configBase: gs://kops-k8s-cluster-store/
+  configBase: gs://kops-k8s-cluster-store/hazelsoft-ms.k8s.local
   etcdClusters:
-  - etcdMembers:
-    - instanceGroup: master-asia-south1-a
+  - cpuRequest: 200m
+    etcdMembers:
+    - instanceGroup: control-plane-asia-south1-a
       name: a
+    - instanceGroup: control-plane-asia-south1-b
+      name: b
+    - instanceGroup: control-plane-asia-south1-c
+      name: c
+    manager:
+      backupRetentionDays: 90
+    memoryRequest: 100Mi
     name: main
-  - etcdMembers:
-    - instanceGroup: master-asia-south1-b
+  - cpuRequest: 100m
+    etcdMembers:
+    - instanceGroup: control-plane-asia-south1-a
       name: a
+    - instanceGroup: control-plane-asia-south1-b
+      name: b
+    - instanceGroup: control-plane-asia-south1-b
+      name: c
+    manager:
+      backupRetentionDays: 90
+    memoryRequest: 100Mi
     name: events
+  iam:
+    allowContainerRegistry: true
+    legacy: false
+  kubelet:
+    anonymousAuth: false
   kubernetesApiAccess:
   - 0.0.0.0/0
-  kubernetesVersion: '1.26.0'
-  masterPublicName: api-ms.k8s.hazelsoft.in
-  networkID: vpc-6335dd1a
+  - ::/0
+  kubernetesVersion: v1.26.0
   networking:
     calico: {}
   nonMasqueradeCIDR: 100.64.0.0/10
   project: kubernetes-trial-429011
   sshAccess:
   - 0.0.0.0/0
+  - ::/0
   subnets:
-  - cidr: 172.20.32.0/19
-    name: asia-south1-a
+  - cidr: 10.0.16.0/20
+    name: asia-south1
     region: asia-south1
     type: Private
-  - cidr: 172.20.64.0/19
-    name: asia-south1-b
+  - cidr: 10.0.32.0/20
+    name: asia-south2-utility
     region: asia-south1
-    type: Private
-  - cidr: 172.20.96.0/19
-    name: asia-south1-c
-    region: asia-south1
-    type: Private
-  - cidr: 172.20.0.0/22
-    name: utility-asia-south1-a
-    region: asia-south1
-    type: Utility
-
+    type: Public
   topology:
-    bastion:
-      bastionPublicName: bastion-ms.k8s.hazelsoft.in
     dns:
       type: Public
-
 ---
 
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
+  creationTimestamp: null
   labels:
     kops.k8s.io/cluster: hazelsoft-ms.k8s.local
-  name: bastions
+  name: control-plane-asia-south1-a
 spec:
-  image: kope.io/k8s-1.6-debian-jessie-amd64-hvm-ebs-2017-05-02
-  machineType: n2d-standard-4
-  maxSize: 1
-  minSize: 1
-  role: Bastion
-  subnets:
-  - utility-asia-south1-a
-  zones:
-  - asia-south1-a
-
-
----
-
-apiVersion: kops.k8s.io/v1alpha2
-kind: InstanceGroup
-metadata:
-  labels:
-    kops.k8s.io/cluster: hazelsoft-ms.k8s.local
-  name: master-asia-south1-b
-spec:
-  image: kope.io/k8s-1.6-debian-jessie-amd64-hvm-ebs-2017-05-02
-  machineType: n2d-standard-4
+  image: ubuntu-os-cloud/ubuntu-2004-focal-v20240607
+  machineType: e2-medium
   maxSize: 1
   minSize: 1
   role: Master
   subnets:
-  - asia-south1-b  
+  - asia-south1
+  zones:
+  - asia-south1-a
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: null
+  labels:
+    kops.k8s.io/cluster: hazelsoft-ms.k8s.local
+  name: control-plane-asia-south1-b
+spec:
+  image: ubuntu-os-cloud/ubuntu-2004-focal-v20240607
+  machineType: e2-medium
+  maxSize: 1
+  minSize: 1
+  role: Master
+  subnets:
+  - asia-south1
   zones:
   - asia-south1-b
 
 ---
 
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: null
+  labels:
+    kops.k8s.io/cluster: hazelsoft-ms.k8s.local
+  name: control-plane-asia-south1-c
+spec:
+  image: ubuntu-os-cloud/ubuntu-2004-focal-v20240607
+  machineType: e2-medium
+  maxSize: 1
+  minSize: 1
+  role: Master
+  subnets:
+  - asia-south1
+  zones:
+  - asia-south1-c
+
+---
 
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
+  creationTimestamp: null
   labels:
     kops.k8s.io/cluster: hazelsoft-ms.k8s.local
-  name: nodes
+  name: nodes-asia-south1-a
 spec:
-  image: kope.io/k8s-1.6-debian-jessie-amd64-hvm-ebs-2017-05-02
-  machineType: n2d-standard-4
-  maxSize: 5
-  minSize: 3
+  image: ubuntu-os-cloud/ubuntu-2004-focal-v20240607
+  machineType: e2-medium
+  maxSize: 3
+  minSize: 2
+  nodeLabels:
+    cloud.google.com/metadata-proxy-ready: "true"
   role: Node
   subnets:
-  - asia-south1-c
+  - asia-south1
   zones:
-  - asia-south1-c
+  - asia-south1-a
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: null
+  labels:
+    kops.k8s.io/cluster: hazelsoft-ms.k8s.local
+  name: bastions
+spec:
+  image: ubuntu-os-cloud/ubuntu-2004-focal-v20240607
+  machineType: e2-micro
+  maxSize: 1
+  minSize: 1
+  role: Bastion
+  subnets:
+  - asia-south2-utility
+  zones:
+  - asia-south1-a
