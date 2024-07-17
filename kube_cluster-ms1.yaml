@@ -1,0 +1,119 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  creationTimestamp: null
+  name: hazelsoft-ms.k8s.local
+spec:
+  api:
+    loadBalancer:
+      type: Internal
+  authorization:
+    rbac: {}
+  channel: stable
+  cloudConfig: {}
+  cloudProvider: gce
+  configBase: gs://kops-k8s-cluster-store/hazelsoft-ms.k8s.local
+  etcdClusters:
+  - cpuRequest: 200m
+    etcdMembers:
+    - instanceGroup: control-plane-asia-south1-a
+      name: a
+    manager:
+      backupRetentionDays: 90
+    memoryRequest: 100Mi
+    name: main
+  - cpuRequest: 100m
+    etcdMembers:
+    - instanceGroup: control-plane-asia-south1-a
+      name: a
+    manager:
+      backupRetentionDays: 90
+    memoryRequest: 100Mi
+    name: events
+  iam:
+    allowContainerRegistry: true
+    legacy: false
+  kubelet:
+    anonymousAuth: false
+  kubernetesApiAccess:
+  - 0.0.0.0/0
+  - ::/0
+  kubernetesVersion: v1.26.15
+  networking:
+    calico: {}
+  nonMasqueradeCIDR: 100.64.0.0/10
+  project: kubernetes-trial-429011
+  sshAccess:
+  - 0.0.0.0/0
+  - ::/0
+  subnets:
+  - cidr: 10.0.16.0/20
+    name: asia-south1
+    region: asia-south1
+    type: Private
+  - cidr: 10.0.32.0/20
+    name: asia-south2-utility
+    region: asia-south1
+    type: Public
+  topology:
+    dns:
+      type: Private
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: null
+  labels:
+    kops.k8s.io/cluster: hazelsoft-ms.k8s.local
+  name: control-plane-asia-south1-a
+spec:
+  image: ubuntu-os-cloud/ubuntu-2204-jammy-v20240701
+  machineType: e2-medium
+  maxSize: 1
+  minSize: 1
+  role: Master
+  subnets:
+  - asia-south1
+  zones:
+  - asia-south1-a
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: null
+  labels:
+    kops.k8s.io/cluster: hazelsoft-ms.k8s.local
+  name: nodes-asia-south1-a
+spec:
+  image: ubuntu-os-cloud/ubuntu-2204-jammy-v20240701
+  machineType: e2-medium
+  maxSize: 3
+  minSize: 2
+  nodeLabels:
+    cloud.google.com/metadata-proxy-ready: "true"
+  role: Node
+  subnets:
+  - asia-south1
+  zones:
+  - asia-south1-a
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: null
+  labels:
+    kops.k8s.io/cluster: hazelsoft-ms.k8s.local
+  name: bastions
+spec:
+  image: ubuntu-os-cloud/ubuntu-2004-focal-v20240607
+  machineType: e2-micro
+  maxSize: 1
+  minSize: 1
+  role: Bastion
+  subnets:
+  - asia-south2-utility
+  zones:
+  - asia-south1-a
