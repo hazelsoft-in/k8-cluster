@@ -6,7 +6,7 @@ metadata:
 spec:
   api:
     loadBalancer:
-      type: Public
+      type: Internal
   authorization:
     rbac: {}
   channel: stable
@@ -18,10 +18,10 @@ spec:
     etcdMembers:
     - instanceGroup: control-plane-asia-south1-a
       name: a
-    - instanceGroup: control-plane-asia-south1-b
-      name: b
-    - instanceGroup: control-plane-asia-south1-c
-      name: c
+#    - instanceGroup: control-plane-asia-south1-b
+#      name: b
+#    - instanceGroup: control-plane-asia-south1-c
+#      name: c
     manager:
       backupRetentionDays: 90
     memoryRequest: 100Mi
@@ -30,10 +30,10 @@ spec:
     etcdMembers:
     - instanceGroup: control-plane-asia-south1-a
       name: a
-    - instanceGroup: control-plane-asia-south1-b
-      name: b
-    - instanceGroup: control-plane-asia-south1-c
-      name: c
+#    - instanceGroup: control-plane-asia-south1-b
+#      name: b
+#    - instanceGroup: control-plane-asia-south1-c
+#      name: c
     manager:
       backupRetentionDays: 90
     memoryRequest: 100Mi
@@ -65,7 +65,7 @@ spec:
     type: Public
   topology:
     dns:
-      type: Public
+      type: Private
 ---
 
 apiVersion: kops.k8s.io/v1alpha2
@@ -88,43 +88,43 @@ spec:
 
 ---
 
-apiVersion: kops.k8s.io/v1alpha2
-kind: InstanceGroup
-metadata:
-  creationTimestamp: null
-  labels:
-    kops.k8s.io/cluster: hazelsoft-ms.k8s.local
-  name: control-plane-asia-south1-b
-spec:
-  image: ubuntu-os-cloud/ubuntu-2204-jammy-v20240701
-  machineType: e2-medium
-  maxSize: 1
-  minSize: 1
-  role: Master
-  subnets:
-  - asia-south1
-  zones:
-  - asia-south1-b
+#apiVersion: kops.k8s.io/v1alpha2
+#kind: InstanceGroup
+#metadata:
+#  creationTimestamp: null
+#  labels:
+#    kops.k8s.io/cluster: hazelsoft-ms.k8s.local
+#  name: control-plane-asia-south1-b
+#spec:
+#  image: ubuntu-os-cloud/ubuntu-2204-jammy-v20240701
+#  machineType: e2-medium
+#  maxSize: 1
+#  minSize: 1
+#  role: Master
+#  subnets:
+#  - asia-south1
+#  zones:
+#  - asia-south1-b
 
 ---
 
-apiVersion: kops.k8s.io/v1alpha2
-kind: InstanceGroup
-metadata:
-  creationTimestamp: null
-  labels:
-    kops.k8s.io/cluster: hazelsoft-ms.k8s.local
-  name: control-plane-asia-south1-c
-spec:
-  image: ubuntu-os-cloud/ubuntu-2204-jammy-v20240701
-  machineType: e2-medium
-  maxSize: 1
-  minSize: 1
-  role: Master
-  subnets:
-  - asia-south1
-  zones:
-  - asia-south1-c
+#apiVersion: kops.k8s.io/v1alpha2
+#kind: InstanceGroup
+#metadata:
+#  creationTimestamp: null
+#  labels:
+#    kops.k8s.io/cluster: hazelsoft-ms.k8s.local
+#  name: control-plane-asia-south1-c
+#spec:
+#  image: ubuntu-os-cloud/ubuntu-2204-jammy-v20240701
+#  machineType: e2-medium
+#  maxSize: 1
+#  minSize: 1
+#  role: Master
+#  subnets:
+#  - asia-south1
+#  zones:
+#  - asia-south1-c
 
 ---
 
